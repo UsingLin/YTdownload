@@ -1,6 +1,7 @@
 import ssl
 from pytubefix import YouTube
 import os
+from PyQt5 import QtWidgets, QtCore
 
 # print(yt.title)           # 影片標題
 # print(yt.length)          # 影片長度 ( 秒 )
@@ -45,5 +46,34 @@ def Download_mp3(url):
     except Exception as e:
         print("\033[31m下載失敗: \033[0m", e)
 
+#影片下載
+def Download_mp4(url):
+    try:
+        yt = YouTube(url)
+        print("\033[33mMP4\033[0m ->\033[34m Downloading... \033[0m" + yt.title)
+
+        if not os.path.exists('C:/Users/USER/Downloads'):
+            print("該路徑不存在")
+
+        out_file = yt.streams.filter().get_highest_resolution().download(output_path= 'C:/Users/USER/Downloads')
+
+        #file name
+        base, ext = os.path.splitext(out_file)
+        new_file = base + ".mp4"
+        os.rename(out_file, new_file)
+
+        print("\033[32m下載完成: \033[0m", new_file)
+
+    except Exception as e:
+        print("\033[31m下載失敗: \033[0m", e)
+
+#主程式
 if __name__ == "__main__":
-    Download_mp3(input())
+    choice = int(input("1.mp3, 2.mp4"))
+
+    if choice == 1:
+        Download_mp3(input())
+    elif choice == 2:
+        Download_mp4(input())
+
+
